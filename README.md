@@ -49,4 +49,56 @@ docker pull <IMAGENAME>
   - Image를 Pull 받으면 레이어들은 독립적으로 저장, 컨테이너를 실행할 때 이 레이어들을 차례대로 쌓아올려 특정 위치에 Mount. Layer들은 Read-Only라 **변하지 않음**
   - 레이어들 위에 마지막으로 컨테이너 전용 쓰기 가능한 레이어를 쌓아 모든 변경 사항을 저장
   - 위의 이미지는 제일 아래의 `b4d181a07f80` 레이어부터 아래의 레이어를 쌓아서 만들어진 이미지
-  - 
+
+#### 이미지 Run & Diff & Commit 
+```
+docker run -it nginx bash
+```
+```
+-i : stdin 활성화
+-t : tty(Bash 사용 위해, 터미널)
+```
+- git bash가 열림
+```
+root@335a1125bb70:/#
+```
+docker diff로 변하는 부분 확인(아직까지는 출력 x)
+```
+docker diff 335a1125bb70
+```
+파일 하나 생성
+```
+root@335a1125bb70:/# cd tmp
+root@335a1125bb70:/tmp# touch FILE
+```
+diff 확인
+```
+docker diff 335a1125bb70
+C /tmp
+A /tmp/FILE
+C : 변경
+A : 추가
+D : 삭제
+```
+컨테이너 내부의 변경사항은 같은 이미지를 사용하는 다른 컨테이너에는 **아무 영향을 끼치지 않음!**
+ 
+이미지 Commit
+컨테이너 변경 사항을 이미지로 새로 저장
+```
+docker commit 335a1125bb70 nginx:modified
+```
+이 경우, 기존 nginx layer들에 새로운 레이어를 최상단에 새로 만들어 레이어 구조로 사용
+만약 컨테이너를 다시 실행하면 이 레이어 위에 전용 쓰기 레이어가 다시 추가
+
+docker history로 레이어 확인
+```
+docker history nginx:new
+344e8fed361b   16 seconds ago   bash                                            0B
+4cdc5dd7eaad   5 days ago       /bin/sh -c #(nop)  CMD ["nginx" "-g" "daemon…   0B
+<missing>      5 days ago       /bin/sh -c #(nop)  STOPSIGNAL SIGQUIT           0B
+<missing>      5 days ago       /bin/sh -c #(nop)  EXPOSE 80                    0B
+<missing>      5 days ago       /bin/sh -c #(nop)  ENTRYPOINT ["/docker-entr…   0B
+<missing>      5 days ago       /bin/sh -c #(nop) COPY file:09a214a3e07c919a…   4.61kB
+```
+
+
