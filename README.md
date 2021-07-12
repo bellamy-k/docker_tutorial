@@ -135,3 +135,8 @@ RUN apt-get update
 RUN apt-get install -y git
 ```
 해당 내용을 Dockerfile로 저장하고 build로 ubuntu:git2 라는 이름의 이미지 생성
+```
+docker build -t ubuntu:git2 .
+-t : 새로 생성할 이미지 이름 지정(tag)
+. : Dockerfile 
+```
