@@ -116,6 +116,22 @@ docker commit $(docker ps -alq) ubuntu:git-layer-1
 docker run ubuntu:git-layer-1 /bin/sh -c 'apt-get install -y git'
 docker commit $(docker ps -alq) ubuntu:git
 $(docker ps -alq) : 가장 최근에 만들어진 컨테이너 ID
+docker run -it ubuntu:git bash -c 'git --version'
+git version 2.25.1
 ```
-
-
+history 확인
+```
+docker history ubuntu:git
+IMAGE          CREATED          CREATED BY                                      SIZE      COMMENT
+ea293bce76e1   3 minutes ago    /bin/sh -c apt-get install -y git               102MB
+487906025bc4   38 minutes ago   /bin/sh -c apt-get update                       29.3MB
+9873176a8ff5   3 weeks ago      /bin/sh -c #(nop)  CMD ["bash"]                 0B
+<missing>      3 weeks ago      /bin/sh -c #(nop) ADD file:920cf788d1ba88f76…   72.7MB
+```
+Dockerfile로 같은 환경 만들기
+```
+FROM ubuntu:focal
+RUN apt-get update
+RUN apt-get install -y git
+```
+해당 내용을 Dockerfile로 저장하고 build로 ubuntu:git2 라는 이름의 이미지 생성
