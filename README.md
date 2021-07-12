@@ -101,4 +101,17 @@ docker history nginx:new
 <missing>      5 days ago       /bin/sh -c #(nop) COPY file:09a214a3e07c919a…   4.61kB
 ```
 
+#### Docker Commit, Dockerfile로 이미지 만들기
+우선 git이 없는 ubuntu image를 pull
+```
+docker pull ubuntu:focal
+docker run -it ubuntu:focal /bin/sh -c 'git --version'
+/bin/sh: 1: git: not found
+- c : sh 실행시 문자열로부터 명령을 읽음
+```
+2단계에 걸쳐 git 설치
+```
+docker run ubuntu:focal /bin/sh -c 'apt-get update'
+docker commit $(docker ps -alq) ubuntu:git-layer-1
 
+```
