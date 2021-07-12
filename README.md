@@ -138,5 +138,5 @@ RUN apt-get install -y git
 ```
 docker build -t ubuntu:git2 .
 -t : 새로 생성할 이미지 이름 지정(tag)
-. : Dockerfile 
+. : Dockerfile 이  
 ```
