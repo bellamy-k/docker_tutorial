@@ -138,5 +138,8 @@ RUN apt-get install -y git
 ```
 docker build -t ubuntu:git2 .
 -t : 새로 생성할 이미지 이름 지정(tag)
-. : Dockerfile 이  
+. : Dockerfile이 존재하는 곳
 ```
+Dockerfile의 RUN은 단순하게 셀 명령만 실행하는게 아니라, 바로 전 스텝의 이미지를 기반으로 컨테이너를 실행하고 RUN에 지정된 명령어를 실행함. 이후 커밋해서 새로운 이미지 생성
+history를 확인하면 이미지 명만 다르고 다 비슷함.  
+중간 이미지에서는 git이 실행이 안 되기 때문에 도커 빌드 중에 에러가 발생했다면 중간 이미지에서 셀을 실행해 어떤 문제가 있는지 직접 확인도 가능
