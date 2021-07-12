@@ -113,5 +113,9 @@ docker run -it ubuntu:focal /bin/sh -c 'git --version'
 ```
 docker run ubuntu:focal /bin/sh -c 'apt-get update'
 docker commit $(docker ps -alq) ubuntu:git-layer-1
-
+docker run ubuntu:git-layer-1 /bin/sh -c 'apt-get install -y git'
+docker commit $(docker ps -alq) ubuntu:git
+$(docker ps -alq) : 가장 최근에 만들어진 컨테이너 ID
 ```
+
+
